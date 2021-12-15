@@ -1,0 +1,20 @@
+import pandas as pd
+import streamlit as st 
+
+df = pd.read_excel ("Price_Zone_Lists.xlsx", engine='openpyxl')
+
+st.sidebar.image("https://y1cj3stn5fbwhv73k0ipk1eg-wpengine.netdna-ssl.com/wp-content/uploads/2017/08/Telit-dark-logo.svg")
+st.sidebar.title ("Rome Global Price Zone List")
+
+
+score = st.sidebar.slider('Select min Price Zone', min_value=1, max_value=7, value = 7) # Getting the input.
+df = df[df['Price Zone'] <= score] # Filtering the dataframe.
+
+country_list = ["All", "Israel", "Germany", "United Kingdom"]
+select = st.sidebar.selectbox('Filter the region here:', country_list, key='1')
+if select =="All":
+    filtered_df = df
+else:
+    filtered_df = df[df['Country']==select]
+    
+st.dataframe(filtered_df.style.format(subset=['Price Zone'], formatter="{:.0f}"), width=3300, height=1900)
